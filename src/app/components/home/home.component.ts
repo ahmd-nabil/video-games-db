@@ -20,23 +20,23 @@ export class HomeComponent implements OnInit {
     console.log(this.activatedRoute.snapshot);
     this.activatedRoute.params.subscribe((params: Params) => {
       if(params['game-name']) {
-        return this.searchGames(this.sort, params['game-name']);
+        return this.searchGames(params['game-name']);
       } else {
-        return this.searchGames(this.sort);
+        return this.getAllGames();
       }
     });
   }
 
-  searchGames(sort: string, name?: string) {
-    if(name) {
-      this.gameService.searchGame(sort, name).subscribe(apiResponse => {
-        this.games = apiResponse.results;
-      });
-    } else {
-      this.gameService.getGames(sort).subscribe(apiResponse => {
-        this.games = apiResponse.results;
-      });
-    }
+  getAllGames() {
+    this.gameService.getGames().subscribe(apiResponse => {
+      this.games = apiResponse.results;
+    });
+  }
+
+  searchGames(name: string) {
+    this.gameService.searchGame(name).subscribe(apiResponse => {
+      this.games = apiResponse.results;
+    });
   }
   openGameDetails(gameId){}
 }

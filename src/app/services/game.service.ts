@@ -12,12 +12,11 @@ export class GameService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getGames(ordering: string) : Observable<ApiResponse<Game>> {
+  getGames() : Observable<ApiResponse<Game>> {
       return this.httpClient.get<ApiResponse<Game>>(env.baseUrl);
   }
 
   searchGame(
-    ordering?: string,
     search?: string
   ) : Observable<ApiResponse<Game>> {
     const params = {'search': search};
