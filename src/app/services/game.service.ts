@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Game } from '../models/game';
@@ -12,10 +12,15 @@ export class GameService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getGames(
+  getGames(ordering: string) : Observable<ApiResponse<Game>> {
+      return this.httpClient.get<ApiResponse<Game>>(env.baseUrl);
+  }
+
+  searchGame(
     ordering?: string,
     search?: string
   ) : Observable<ApiResponse<Game>> {
-    return this.httpClient.get<ApiResponse<Game>>(env.baseUrl);
+    const params = {'search': search};
+    return this.httpClient.get<ApiResponse<Game>>(`${env.baseUrl}`, {params: params});
   }
 }

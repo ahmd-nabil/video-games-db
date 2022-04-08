@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 import { Game } from 'src/app/models/game';
 import { GameService } from 'src/app/services/game.service';
 
@@ -17,11 +17,26 @@ export class HomeComponent implements OnInit {
               private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.gameService.getGames().subscribe(apiResponse => {
-      this.games = apiResponse.results;
+    console.log(this.activatedRoute.snapshot);
+    this.activatedRoute.params.subscribe((params: Params) => {
+      if(params['game-name']) {
+        return this.searchGames(this.sort, params['game-name']);
+      } else {
+        return this.searchGames(this.sort);
+      }
     });
   }
 
-  searchGames(sort){}
+  searchGames(sort: string, name?: string) {
+    if(name) {
+      this.gameService.searchGame(sort, name).subscribe(apiResponse => {
+        this.games = apiResponse.results;
+      });
+    } else {
+      this.gameService.getGames(sort).subscribe(apiResponse => {
+        this.games = apiResponse.results;
+      });
+    }
+  }
   openGameDetails(gameId){}
 }
